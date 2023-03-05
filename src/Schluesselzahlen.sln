@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schluesselzahlen", "Schluesselzahlen.csproj", "{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}.Debug|x86.ActiveCfg = Debug|x86
+		{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}.Debug|x86.Build.0 = Debug|x86
+		{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}.Release|x86.ActiveCfg = Release|x86
+		{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99985B41-5CD8-43E2-BBC2-BAA2AC7860B8}
+	EndGlobalSection
+EndGlobal

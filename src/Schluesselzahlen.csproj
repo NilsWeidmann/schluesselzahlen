@@ -1,0 +1,153 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{99E1974C-F2DE-4424-ACE3-85E1EBE04F78}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>WindowsApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Schluesselzahlen</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.4.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlAgilityPack.1.11.4\lib\Net40-client\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alternativen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alternativen.Designer.cs">
+      <DependentUpon>Alternativen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BitteWarten.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BitteWarten.Designer.cs">
+      <DependentUpon>BitteWarten.cs</DependentUpon>
+    </Compile>
+    <Compile Include="click_tt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="click_tt.designer.cs">
+      <DependentUpon>click_tt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data.cs" />
+    <Compile Include="Dateninput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dateninput.Designer.cs">
+      <DependentUpon>Dateninput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Initialisieren.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Initialisieren.Designer.cs">
+      <DependentUpon>Initialisieren.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Konflikt.cs" />
+    <Compile Include="Liga.cs" />
+    <Compile Include="Partner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Partner.Designer.cs">
+      <DependentUpon>Partner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Partnerschaft.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Staffel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Staffel.Designer.cs">
+      <DependentUpon>Staffel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Team.cs" />
+    <Compile Include="Textdatei.cs" />
+    <Compile Include="Verein.cs" />
+    <Compile Include="Zusatz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zusatz.Designer.cs">
+      <DependentUpon>Zusatz.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Alternativen.resx">
+      <DependentUpon>Alternativen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BitteWarten.resx">
+      <DependentUpon>BitteWarten.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="click_tt.resx">
+      <DependentUpon>click_tt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dateninput.resx">
+      <DependentUpon>Dateninput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Initialisieren.resx">
+      <DependentUpon>Initialisieren.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Partner.resx">
+      <DependentUpon>Partner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Staffel.resx">
+      <DependentUpon>Staffel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zusatz.resx">
+      <DependentUpon>Zusatz.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".vs\Schluesselzahlen\v16\.suo" />
+    <None Include="packages.config" />
+    <None Include="Schluesselzahlen_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HtmlAgilityPack.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>
