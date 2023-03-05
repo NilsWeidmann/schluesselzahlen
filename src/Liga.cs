@@ -47,5 +47,16 @@ namespace Schluesselzahlen
                 }
             }
         }
+
+        public Liga clone()
+        {
+            Liga l = new Liga();
+            l.anzahl_teams = anzahl_teams;
+            l.index = index;
+            l.name = name;
+            l.team = new Team[Data.team_max];
+            l.feld = feld;
+            return l;
+        }
     }  
 }

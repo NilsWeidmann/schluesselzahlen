@@ -37,5 +37,19 @@ namespace Schluesselzahlen
                             prio++;
                 }
         }
+
+        public Verein clone()
+        {
+            Verein v = new Verein();
+            v.name = name;
+            v.index = index;
+            v.a = a;
+            v.b = b;
+            v.x = x;
+            v.y = y;
+            v.team = new Team[team.Length];
+            v.kapazitaet = kapazitaet;
+            return v;
+        }
     }
 }

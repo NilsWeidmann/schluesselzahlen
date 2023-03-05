@@ -77,54 +77,20 @@ namespace Schluesselzahlen
         public static void copy(Liga[] l1, Liga[] l2, Verein[] v1, Verein[] v2, List<Partnerschaft> p1, List<Partnerschaft> p2)
         {
             for (int i = 0; i < v1.Length && v1[i] != null; i++)
-            {
-                v2[i] = new Verein();
-                v2[i].name = v1[i].name;
-                v2[i].index = v1[i].index;
-                v2[i].a = v1[i].a;
-                v2[i].b = v1[i].b;
-                v2[i].x = v1[i].x;
-                v2[i].y = v1[i].y;
-                v2[i].team = new Team[v1[i].team.Length];
-                v2[i].kapazitaet = v1[i].kapazitaet;
-            }
+                v2[i] = v1[i].clone();
+                
             p2 = new List<Partnerschaft>();
             foreach (Partnerschaft p in p1)
                 p2.Add(new Partnerschaft(v2[p.a.index], p.woche_a, v2[p.b.index], p.woche_b));
 
             for (int i = 0; i < l1.Length && l1[i] != null; i++)
             {
-                l2[i] = new Liga();
-                l2[i].anzahl_teams = l1[i].anzahl_teams;
-                l2[i].index = l1[i].index;
-                l2[i].name = l1[i].name;
-                l2[i].team = new Team[team_max];
-                l2[i].feld = l1[i].feld;
+                l2[i] = l1[i].clone();
                 for (int j = 0; j < l1[i].team.Length && l1[i].team[j] != null; j++)
                 {
-                    l2[i].team[j] = new Team();
-                    l2[i].team[j].index = l1[i].team[j].index;
-                    l2[i].team[j].liga = l2[i];
-                    l2[i].team[j].name = l1[i].team[j].name;
-                    l2[i].team[j].option = new bool[team_max];
-                    for (int k = 0; k < team_max; k++)
-                        l2[i].team[j].option[k] = l1[i].team[j].option[k];
-                    for (int k = 0; k < l1[i].team[j].spieltag.Length; k++)
-                        l2[i].team[j].spieltag[k] = l1[i].team[j].spieltag[k];
-                    l2[i].team[j].woche = l1[i].team[j].woche;
-                    l2[i].team[j].team = l1[i].team[j].team;
+                    l2[i].team[j] = l1[i].team[j].clone();
                     if (l1[i].team[j].verein.index == -1)
-                    {
-                        l2[i].team[j].verein = new Verein();
-                        l2[i].team[j].verein.name = l1[i].team[j].verein.name;
-                        l2[i].team[j].verein.index = l1[i].team[j].verein.index;
-                        l2[i].team[j].verein.a = l1[i].team[j].verein.a;
-                        l2[i].team[j].verein.b = l1[i].team[j].verein.b;
-                        l2[i].team[j].verein.x = l1[i].team[j].verein.x;
-                        l2[i].team[j].verein.y = l1[i].team[j].verein.y;
-                        l2[i].team[j].verein.kapazitaet = l1[i].team[j].verein.kapazitaet;
-                        l2[i].team[j].verein.team = new Team[team_max];
-                    }
+                        l2[i].team[j].verein = l1[i].team[j].verein.clone();
                     else
                     {
                         l2[i].team[j].verein = v2[l1[i].team[j].verein.index];
@@ -135,7 +101,6 @@ namespace Schluesselzahlen
                                 break;
                             }
                     }
-                    l2[i].team[j].zahl = l1[i].team[j].zahl;
                 }
             }
         }

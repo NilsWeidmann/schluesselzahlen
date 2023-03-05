@@ -65,5 +65,22 @@ namespace Schluesselzahlen
                     return false;
             return true;
         }
+
+        public Team clone()
+        {
+            Team t = new Team();
+            t.index = index;
+            t.liga = liga;
+            t.name = name;
+            t.option = new bool[Data.team_max];
+            for (int k = 0; k < Data.team_max; k++)
+                t.option[k] = option[k];
+            for (int k = 0; k < spieltag.Length; k++)
+                t.spieltag[k] = spieltag[k];
+            t.woche = woche;
+            t.team = team;
+            t.zahl = zahl;
+            return t;
+        }
     }
 }
