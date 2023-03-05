@@ -42,12 +42,10 @@ namespace Schluesselzahlen
         {
             dataGridView1.Columns.Clear();
             dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Add("Verein", "Verein");
-            dataGridView1.Columns.Add("A", "A");
-            dataGridView1.Columns.Add("B", "B");
-            dataGridView1.Columns.Add("X", "X");
-            dataGridView1.Columns.Add("Y", "Y");
-            dataGridView1.Columns.Add("Kap.", "Kap.");
+            string[] values = { "Verein", "A", "B", "X", "Y", "Kap." };
+            foreach (string s in values) {
+                dataGridView1.Columns.Add(s, s);
+            }
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dataGridView1.AutoResizeColumns();
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -64,15 +62,14 @@ namespace Schluesselzahlen
             initGrid();
             for (int i = 0; i < verein_array.Length; i++)
             {
-                values[0] = verein_array[i].name;
-                values[1] = verein_array[i].a.ToString() == "0" ? "" : verein_array[i].a.ToString();
-                values[2] = verein_array[i].b.ToString() == "0" ? "" : verein_array[i].b.ToString();
-                values[3] = verein_array[i].x.ToString() == "0" ? "" : verein_array[i].x.ToString();
-                values[4] = verein_array[i].y.ToString() == "0" ? "" : verein_array[i].y.ToString();
-                if (verein_array[i].kapazitaet)
-                    values[5] = "X";
-                else
-                    values[5] = "";
+                Verein v = verein_array[i];
+                values[0] = v.name;
+
+                int[] intValues = { v.a, v.b, v.x, v.y };
+                for (int j = 1; j < 5; j++)
+                    values[j] = intValues[j - 1].ToString() == "0" ? "" : intValues[j - 1].ToString();
+
+                values[5] = v.kapazitaet ? "X" : "";
                 dataGridView1.Rows.Add(values);
             }
 
@@ -377,65 +374,31 @@ namespace Schluesselzahlen
                 verein.ElementAt(i).index--;
             
         }
-        
+
         private void assignGUIElements()
         {
-            external[0] = checkBox1;
-            external[1] = checkBox2;
-            external[2] = checkBox3;
-            external[3] = checkBox4;
-            external[4] = checkBox5;
-            external[5] = checkBox6;
-            external[6] = checkBox7;
-            external[7] = checkBox8;
-            external[8] = checkBox9;
-            external[9] = checkBox10;
-            external[10] = checkBox11;
-            external[11] = checkBox12;
-            external[12] = checkBox13;
-            external[13] = checkBox14;
-            team_name[0] = textBox1;
-            team_name[1] = textBox2;
-            team_name[2] = textBox3;
-            team_name[3] = textBox4;
-            team_name[4] = textBox5;
-            team_name[5] = textBox6;
-            team_name[6] = textBox7;
-            team_name[7] = textBox8;
-            team_name[8] = textBox9;
-            team_name[9] = textBox10;
-            team_name[10] = textBox11;
-            team_name[11] = textBox12;
-            team_name[12] = textBox13;
-            team_name[13] = textBox14;
-            team_ident[0] = textBox15;
-            team_ident[1] = textBox16;
-            team_ident[2] = textBox17;
-            team_ident[3] = textBox18;
-            team_ident[4] = textBox19;
-            team_ident[5] = textBox20;
-            team_ident[6] = textBox21;
-            team_ident[7] = textBox22;
-            team_ident[8] = textBox23;
-            team_ident[9] = textBox24;
-            team_ident[10] = textBox25;
-            team_ident[11] = textBox26;
-            team_ident[12] = textBox27;
-            team_ident[13] = textBox28;
-            reset[0] = button1;
-            reset[1] = button2;
-            reset[2] = button3;
-            reset[3] = button4;
-            reset[4] = button5;
-            reset[5] = button6;
-            reset[6] = button7;
-            reset[7] = button8;
-            reset[8] = button9;
-            reset[9] = button10;
-            reset[10] = button11;
-            reset[11] = button12;
-            reset[12] = button13;
-            reset[13] = button14;
+            CheckBox[] checkBoxes = {checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7,
+                                     checkBox8, checkBox9,checkBox10,checkBox11,checkBox12,checkBox13,checkBox14};
+
+            for (int i = 0; i < 14; i++)
+                external[i] = checkBoxes[i];
+
+            TextBox[] textBoxes = { textBox1,  textBox2, textBox3, textBox4, textBox5, textBox6, textBox7,
+                                    textBox8,  textBox9,textBox10,textBox11,textBox12,textBox13,textBox14,
+                                   textBox15, textBox16,textBox17,textBox18,textBox19,textBox20,textBox21,
+                                   textBox22, textBox23,textBox24,textBox25,textBox26,textBox27,textBox28 };
+
+            for (int i = 0; i < 14; i++)
+                team_name[i] = textBoxes[i];
+
+            for (int i = 0; i < 14; i++)
+                team_ident[i] = textBoxes[i + 14];
+
+            Button[] buttons = {button1, button2, button3, button4, button5, button6, button7,
+                                button8, button9,button10,button11,button12,button13,button14};
+
+            for (int i = 0; i < 14; i++)
+                reset[i] = buttons[i];
         }
 
         private void button15_Click(object sender, EventArgs e)
