@@ -34,7 +34,7 @@ namespace Schluesselzahlen
                 comboBox1.SelectedIndex = 0;
             else
                 for (int i = 0; i < comboBox1.Items.Count; i++)
-                    if (Data.toInt(comboBox1.Items[i].ToString()) == l.feld)
+                    if (Util.toInt(comboBox1.Items[i].ToString()) == l.feld)
                         comboBox1.SelectedIndex = i;
         }
 
@@ -48,7 +48,7 @@ namespace Schluesselzahlen
         private void button2_Click(object sender, EventArgs e)
         {
             liga.name = Data.clear(textBox1.Text);
-            liga.feld = Data.toInt(comboBox1.SelectedItem.ToString());
+            liga.feld = Util.toInt(comboBox1.SelectedItem.ToString());
             if (neu)
             {
                 liga.team = new Team[max];

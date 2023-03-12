@@ -128,7 +128,7 @@ namespace Schluesselzahlen
                 if (combo[box] != sender && sender.SelectedIndex == combo[box].SelectedIndex)
                     combo[box].SelectedIndex = -1;
                 if (combo[box] == sender && combo[box].SelectedIndex != -1)
-                    k[i].t[box].zahl = Data.toInt(combo[box].SelectedItem.ToString());
+                    k[i].t[box].zahl = Util.toInt(combo[box].SelectedItem.ToString());
             }
         }
 

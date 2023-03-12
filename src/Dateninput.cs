@@ -256,7 +256,7 @@ namespace Schluesselzahlen
             if (dataGridView1.Rows[e.RowIndex].IsNewRow && e.ColumnIndex != 0)
                 return;
             String value = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].EditedFormattedValue.ToString();
-            int zahl = Data.toInt(value);
+            int zahl = Util.toInt(value);
             switch (e.ColumnIndex)
             {
                 case 0:
@@ -269,7 +269,7 @@ namespace Schluesselzahlen
                     if (zahl > 0 && zahl <= Data.feld[0])
                     {
                         verein.ElementAt(e.RowIndex).a = zahl;
-                        verein.ElementAt(e.RowIndex).b = Data.gegenlaeufig_1[Data.feld[0]-1, Data.feld[0]-1, zahl-1];
+                        verein.ElementAt(e.RowIndex).b = Data.nm.getGegenlaeufig(Data.feld[0], Data.feld[0], zahl);
                     }
                     else
                     {
@@ -289,7 +289,7 @@ namespace Schluesselzahlen
                     if (zahl > 0 && zahl <= Data.feld[0])
                     {
                         verein.ElementAt(e.RowIndex).b = zahl;
-                        verein.ElementAt(e.RowIndex).a = Data.gegenlaeufig_1[Data.feld[0]-1, Data.feld[0]-1, zahl-1];
+                        verein.ElementAt(e.RowIndex).a = Data.nm.getGegenlaeufig(Data.feld[0], Data.feld[0], zahl);
                     }
                     else
                     {
@@ -309,7 +309,7 @@ namespace Schluesselzahlen
                     if (zahl > 0 && zahl <= Data.feld[1])
                     {
                         verein.ElementAt(e.RowIndex).x = zahl;
-                        verein.ElementAt(e.RowIndex).y = Data.gegenlaeufig_1[Data.feld[1]-1, Data.feld[1]-1, zahl-1];
+                        verein.ElementAt(e.RowIndex).y = Data.nm.getGegenlaeufig(Data.feld[1], Data.feld[1], zahl);
                     }
                     else
                     {
@@ -329,7 +329,7 @@ namespace Schluesselzahlen
                     if (zahl > 0 && zahl <= Data.feld[1])
                     {
                         verein.ElementAt(e.RowIndex).y = zahl;
-                        verein.ElementAt(e.RowIndex).x = Data.gegenlaeufig_1[Data.feld[1]-1, Data.feld[1]-1, zahl-1];
+                        verein.ElementAt(e.RowIndex).x = Data.nm.getGegenlaeufig(Data.feld[1], Data.feld[1], zahl);
                     }
                     else
                     {

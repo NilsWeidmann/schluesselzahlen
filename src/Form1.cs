@@ -42,9 +42,10 @@ namespace Schluesselzahlen
             fillFields(comboBox11);
             comboBox11.SelectedIndex = 2;
             textBox1.Text = "2";
-            textBox3.Text = "0";
             textBox2.Text = Application.StartupPath;
+            textBox3.Text = "0";
             setFiles(Application.StartupPath);
+            Data.path = Application.StartupPath;
             Data.caller = this;
             clearGrid();
         }
@@ -52,11 +53,8 @@ namespace Schluesselzahlen
         public void fillFields(ComboBox cb)
         {
             cb.Items.Clear();
-            cb.Items.Add("6");
-            cb.Items.Add("8");
-            cb.Items.Add("10");
-            cb.Items.Add("12");
-            cb.Items.Add("14");
+            for (int i = Data.team_min; i<= Data.team_max; i+=2)
+                cb.Items.Add(i.ToString());
             cb.SelectedIndex = -1;
         }
 
@@ -86,7 +84,7 @@ namespace Schluesselzahlen
         private void button3_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            Data.laufzeit = Data.toInt(textBox1.Text) * 60 + Data.toInt(textBox3.Text);
+            Data.laufzeit = Util.toInt(textBox1.Text) * 60 + Util.toInt(textBox3.Text);
             Data.ht.Clear();
             BitteWarten bw = new BitteWarten(this);
             bw.Visible = true;
@@ -121,9 +119,7 @@ namespace Schluesselzahlen
             Data.liga = Data.getStaffeln(Data.verein, sta);
             Data.getBeziehungen(Data.liga, bez);
             Data.allocateTeams(Data.verein, Data.liga);
-            Data.fillArray();
-            Data.buildArray();
-            Data.getSpielplan();
+            Data.getSpielplan(Data.path);
             if (Data.meldung.Count > 0)
             {
                 button3.Enabled = false;
@@ -227,6 +223,7 @@ namespace Schluesselzahlen
             clearGrid();
             if (radioButton1.Checked)
             {
+                verein = Data.verein[comboBox3.SelectedIndex];
                 if (comboBox3.SelectedIndex == -1)
                 {
                     checkBox1.Checked = checkBox1.Enabled = button4.Enabled = false;
@@ -234,41 +231,42 @@ namespace Schluesselzahlen
                 }
                 else
                 {
-                    checkBox1.Checked = Data.verein[comboBox3.SelectedIndex].kapazitaet;
+                    checkBox1.Checked = verein.kapazitaet;
                     button4.Enabled = true;
                 }
-                if (comboBox5.Items.Count > Data.verein[comboBox3.SelectedIndex].a)
-                    comboBox5.SelectedIndex = Data.verein[comboBox3.SelectedIndex].a;
-                if (comboBox6.Items.Count > Data.verein[comboBox3.SelectedIndex].b)
-                    comboBox6.SelectedIndex = Data.verein[comboBox3.SelectedIndex].b;
-                if (comboBox7.Items.Count > Data.verein[comboBox3.SelectedIndex].x)
-                    comboBox7.SelectedIndex = Data.verein[comboBox3.SelectedIndex].x;
-                if (comboBox8.Items.Count > Data.verein[comboBox3.SelectedIndex].y)
-                    comboBox8.SelectedIndex = Data.verein[comboBox3.SelectedIndex].y;
-                for (int j = 0; j < Data.verein[comboBox3.SelectedIndex].team.Length; j++)
+                if (comboBox5.Items.Count > verein.a)
+                    comboBox5.SelectedIndex = verein.a;
+                if (comboBox6.Items.Count > verein.b)
+                    comboBox6.SelectedIndex = verein.b;
+                if (comboBox7.Items.Count > verein.x)
+                    comboBox7.SelectedIndex = verein.x;
+                if (comboBox8.Items.Count > verein.y)
+                    comboBox8.SelectedIndex = verein.y;
+                for (int j = 0; j < verein.team.Length; j++)
                 {
                     String[] inhalt = new String[3];
-                    inhalt[0] = Data.verein[comboBox3.SelectedIndex].team[j].liga.name;
-                    inhalt[1] = Data.verein[comboBox3.SelectedIndex].team[j].name;
-                    if (Data.verein[comboBox3.SelectedIndex].team[j].zahl != 0)
-                        inhalt[2] = Data.verein[comboBox3.SelectedIndex].team[j].zahl.ToString();
+                    inhalt[0] = verein.team[j].liga.name;
+                    inhalt[1] = verein.team[j].name;
+                    if (verein.team[j].zahl != 0)
+                        inhalt[2] = verein.team[j].zahl.ToString();
                     else
                         inhalt[2] = "";
                     dataGridView1.Rows.Add(inhalt);
                     for (int l = 0; l < 3; l++)
                     {
-                        switch (Data.verein[comboBox3.SelectedIndex].team[j].woche)
+                        Color color;
+                        switch (verein.team[j].woche)
                         {
-                            case 'A': dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = Color.Yellow; break;
-                            case 'B': dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = Color.Orange; break;
-                            case 'X': dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = Color.LightBlue; break;
-                            case 'Y': dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = Color.LightGreen; break;
-                            case '-': dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = Color.White; break;
+                            case 'A': color = Color.Yellow; break;
+                            case 'B': color = Color.Orange; break;
+                            case 'X': color = Color.LightBlue; break;
+                            case 'Y': color = Color.LightGreen; break;
+                            default: color = Color.White; break;
                         }
+                        dataGridView1.Rows[anzahl_teams].Cells[l].Style.BackColor = color;
                     }
                     anzahl_teams++;
                 }
-                verein = Data.verein[comboBox3.SelectedIndex];
             }
             else
             {
@@ -278,28 +276,31 @@ namespace Schluesselzahlen
                     inhalt[0] = Data.liga[comboBox1.SelectedIndex].name;
                     inhalt[1] = Data.liga[comboBox1.SelectedIndex].team[j].name;
 
-                    if (Data.liga[comboBox1.SelectedIndex].team[j].zahl != 0)
-                        inhalt[2] = Data.liga[comboBox1.SelectedIndex].team[j].zahl.ToString();
-                    else if (Data.liga[comboBox1.SelectedIndex].team[j].woche == 'A' && Data.liga[comboBox1.SelectedIndex].team[j].verein.a != 0)
-                        if (Data.liga[comboBox1.SelectedIndex].feld == Data.feld[0])
-                            inhalt[2] = Data.liga[comboBox1.SelectedIndex].team[j].verein.a.ToString();
+                    Team team = Data.liga[comboBox1.SelectedIndex].team[j];
+                    int feld = Data.liga[comboBox1.SelectedIndex].feld;
+
+                    if (team.zahl != 0)
+                        inhalt[2] = team.zahl.ToString();
+                    else if (team.woche == 'A' && team.verein.a != 0)
+                        if (feld == Data.feld[0])
+                            inhalt[2] = team.verein.a.ToString();
                         else
-                            inhalt[2] = Data.parallel_1[Data.feld[0] - 1, Data.liga[comboBox1.SelectedIndex].feld - 1, Data.liga[comboBox1.SelectedIndex].team[j].verein.a - 1].ToString();
-                    else if (Data.liga[comboBox1.SelectedIndex].team[j].woche == 'B' && Data.liga[comboBox1.SelectedIndex].team[j].verein.b != 0)
-                        if (Data.liga[comboBox1.SelectedIndex].feld == Data.feld[0])
-                            inhalt[2] = Data.liga[comboBox1.SelectedIndex].team[j].verein.b.ToString();
+                            inhalt[2] = Data.nm.getParallel(Data.feld[0], feld, team.verein.a).ToString();
+                    else if (team.woche == 'B' && team.verein.b != 0)
+                        if (feld == Data.feld[0])
+                            inhalt[2] = team.verein.b.ToString();
                         else
-                            inhalt[2] = Data.parallel_1[Data.feld[0] - 1, Data.liga[comboBox1.SelectedIndex].feld - 1, Data.liga[comboBox1.SelectedIndex].team[j].verein.b - 1].ToString();
-                    else if (Data.liga[comboBox1.SelectedIndex].team[j].woche == 'X' && Data.liga[comboBox1.SelectedIndex].team[j].verein.x != 0)
-                        if (Data.liga[comboBox1.SelectedIndex].feld == Data.feld[1])
-                            inhalt[2] = Data.liga[comboBox1.SelectedIndex].team[j].verein.x.ToString();
+                            inhalt[2] = Data.nm.getParallel(Data.feld[0], feld, team.verein.b).ToString();
+                    else if (team.woche == 'X' && team.verein.x != 0)
+                        if (feld == Data.feld[1])
+                            inhalt[2] = team.verein.x.ToString();
                         else
-                            inhalt[2] = Data.parallel_1[Data.feld[1] - 1, Data.liga[comboBox1.SelectedIndex].feld - 1, Data.liga[comboBox1.SelectedIndex].team[j].verein.x - 1].ToString();
-                    else if (Data.liga[comboBox1.SelectedIndex].team[j].woche == 'Y' && Data.liga[comboBox1.SelectedIndex].team[j].verein.y != 0)
-                        if (Data.liga[comboBox1.SelectedIndex].feld == Data.feld[1])
-                            inhalt[2] = Data.liga[comboBox1.SelectedIndex].team[j].verein.y.ToString();
+                            inhalt[2] = Data.nm.getParallel(Data.feld[1], feld, team.verein.x).ToString();
+                    else if (team.woche == 'Y' && team.verein.y != 0)
+                        if (feld == Data.feld[1])
+                            inhalt[2] = team.verein.y.ToString();
                         else
-                            inhalt[2] = Data.parallel_1[Data.feld[1] - 1, Data.liga[comboBox1.SelectedIndex].feld - 1, Data.liga[comboBox1.SelectedIndex].team[j].verein.y - 1].ToString();
+                            inhalt[2] = Data.nm.getParallel(Data.feld[1], feld, team.verein.y).ToString();
                     else
                         inhalt[2] = "";
                     
@@ -307,7 +308,7 @@ namespace Schluesselzahlen
                     if (!inhalt[2].Equals(""))
                         for (int i = 0; i < 3; i++)
                             dataGridView1.Rows[j].Cells[i].Style.BackColor = Color.LightGreen;
-                    else if (Data.liga[comboBox1.SelectedIndex].team[j].woche != '-')
+                    else if (team.woche != '-')
                         for (int i = 0; i < 3; i++)
                             dataGridView1.Rows[j].Cells[i].Style.BackColor = Color.Yellow;
                 }
@@ -318,23 +319,19 @@ namespace Schluesselzahlen
 
         private void setFiles(string path)
         {
-            Data.gegenlaeufig = new Textdatei(path + @"\Gegenlaeufig.csv");
-            Data.parallel = new Textdatei(path + @"\Parallel.csv");
-            Data.vereinsintern = new Textdatei(path + @"\Vereinsintern.csv");
             Data.staffeln = new Textdatei(path + @"\Staffeln.csv");
             Data.staffeln_b = new Textdatei(path + @"\Staffeln_Backup.csv");
             Data.vereine = new Textdatei(path + @"\Vereine.csv");
             Data.vereine_b = new Textdatei(path + @"\Vereine_Backup.csv");
             Data.beziehungen = new Textdatei(path + @"\Beziehungen.csv");
             Data.beziehungen_b = new Textdatei(path + @"\Beziehungen_Backup.csv");
-            Data.aehnlich = new Textdatei(path + @"\Aehnlich.csv");
-            Data.spielplan = new Textdatei(path + @"\Spielplan.csv");
             if (comboBox10.SelectedIndex != -1 && comboBox11.SelectedIndex != -1)
             {
                 button6.Enabled = true;
                 button2.Enabled = true;
                 button1.Enabled = true;
             }
+            Data.nm = new NumberMapper(path);
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -353,7 +350,7 @@ namespace Schluesselzahlen
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox2.Text = folderBrowserDialog1.SelectedPath;
-                setFiles(textBox2.Text);
+                Data.path = textBox2.Text;
             }
         }
 
@@ -392,7 +389,7 @@ namespace Schluesselzahlen
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             bool frei = true;
-            int key = Data.toInt(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+            int key = Util.toInt(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
             for (int i = 0; i < verein.team[e.RowIndex].liga.anzahl_teams; i++)
                 if (verein.team[e.RowIndex].liga.team[i].zahl == key)
                     frei = false;
@@ -405,7 +402,7 @@ namespace Schluesselzahlen
         private void button15_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex >= 0)
-                Data.liga[comboBox1.SelectedIndex].feld = Data.toInt(textBox4.Text);
+                Data.liga[comboBox1.SelectedIndex].feld = Util.toInt(textBox4.Text);
             if (comboBox1.SelectedIndex >= 0 && comboBox2.SelectedIndex >= 0)
                 Data.liga[comboBox1.SelectedIndex].team[comboBox2.SelectedIndex].zahl = comboBox12.SelectedIndex;
             Data.speichern(Data.liga, Data.verein, Data.partnerschaft, Data.vereine, Data.staffeln, Data.beziehungen);
@@ -419,7 +416,7 @@ namespace Schluesselzahlen
                 if (comboBox5.SelectedIndex == 0)
                     Data.verein[comboBox3.SelectedIndex].b = 0;
                 else
-                    Data.verein[comboBox3.SelectedIndex].b = Data.gegenlaeufig_1[Data.feld[0] - 1, Data.feld[0] - 1, comboBox5.SelectedIndex - 1];
+                    Data.verein[comboBox3.SelectedIndex].b = Data.nm.getGegenlaeufig(Data.feld[0], Data.feld[0], comboBox5.SelectedIndex);
                 comboBox6.SelectedIndex = Data.verein[comboBox3.SelectedIndex].b;
             }
         }
@@ -432,7 +429,7 @@ namespace Schluesselzahlen
                 if (comboBox6.SelectedIndex == 0)
                     Data.verein[comboBox3.SelectedIndex].a = 0;
                 else
-                    Data.verein[comboBox3.SelectedIndex].a = Data.gegenlaeufig_1[Data.feld[0] - 1, Data.feld[0] - 1, comboBox6.SelectedIndex - 1];
+                    Data.verein[comboBox3.SelectedIndex].a = Data.nm.getGegenlaeufig(Data.feld[0], Data.feld[0], comboBox6.SelectedIndex);
                 comboBox5.SelectedIndex = Data.verein[comboBox3.SelectedIndex].a;
             }
         }
@@ -445,7 +442,7 @@ namespace Schluesselzahlen
                 if (comboBox7.SelectedIndex == 0)
                     Data.verein[comboBox3.SelectedIndex].y = 0;
                 else
-                    Data.verein[comboBox3.SelectedIndex].y = Data.gegenlaeufig_1[Data.feld[1] - 1, Data.feld[1] - 1, comboBox7.SelectedIndex - 1];
+                    Data.verein[comboBox3.SelectedIndex].y = Data.nm.getGegenlaeufig(Data.feld[1], Data.feld[1], comboBox7.SelectedIndex);
                 comboBox8.SelectedIndex = Data.verein[comboBox3.SelectedIndex].y;
             }
         }
@@ -458,7 +455,7 @@ namespace Schluesselzahlen
                 if (comboBox8.SelectedIndex == 0)
                     Data.verein[comboBox3.SelectedIndex].x = 0;
                 else
-                    Data.verein[comboBox3.SelectedIndex].x = Data.gegenlaeufig_1[Data.feld[1] - 1, Data.feld[1] - 1, comboBox8.SelectedIndex - 1];
+                    Data.verein[comboBox3.SelectedIndex].x = Data.nm.getGegenlaeufig(Data.feld[1], Data.feld[1], comboBox8.SelectedIndex);
                 comboBox7.SelectedIndex = Data.verein[comboBox3.SelectedIndex].x;
             }
         }
@@ -467,21 +464,21 @@ namespace Schluesselzahlen
         {
             comboBox5.Items.Clear();
             comboBox5.Items.Add('-');
-            for (int i = 1; i <= Data.toInt(comboBox10.SelectedItem.ToString()); i++)
+            for (int i = 1; i <= Util.toInt(comboBox10.SelectedItem.ToString()); i++)
                 comboBox5.Items.Add(i);
-            if (comboBox5.Items.Count > Data.toInt(comboBox5.Text))
-                comboBox5.SelectedIndex = Data.toInt(comboBox5.Text);
+            if (comboBox5.Items.Count > Util.toInt(comboBox5.Text))
+                comboBox5.SelectedIndex = Util.toInt(comboBox5.Text);
             else
                 comboBox5.SelectedIndex = 0;
             comboBox6.Items.Clear();
             comboBox6.Items.Add('-');
-            for (int i = 1; i <= Data.toInt(comboBox10.SelectedItem.ToString()); i++)
+            for (int i = 1; i <= Util.toInt(comboBox10.SelectedItem.ToString()); i++)
                 comboBox6.Items.Add(i);
-            if (comboBox6.Items.Count > Data.toInt(comboBox6.Text))
-                comboBox6.SelectedIndex = Data.toInt(comboBox6.Text);
+            if (comboBox6.Items.Count > Util.toInt(comboBox6.Text))
+                comboBox6.SelectedIndex = Util.toInt(comboBox6.Text);
             else
                 comboBox6.SelectedIndex = 0;
-            Data.feld[0] = Data.toInt(comboBox10.SelectedItem.ToString());
+            Data.feld[0] = Util.toInt(comboBox10.SelectedItem.ToString());
             checkWochen();
             if (comboBox10.SelectedIndex != -1 && comboBox11.SelectedIndex != -1 && Data.staffeln != null)
             {
@@ -495,21 +492,21 @@ namespace Schluesselzahlen
         {
             comboBox7.Items.Clear();
             comboBox7.Items.Add('-');
-            for (int i = 1; i <= Data.toInt(comboBox11.SelectedItem.ToString()); i++)
+            for (int i = 1; i <= Util.toInt(comboBox11.SelectedItem.ToString()); i++)
                 comboBox7.Items.Add(i);
-            if (comboBox7.Items.Count > Data.toInt(comboBox7.Text))
-                comboBox7.SelectedIndex = Data.toInt(comboBox7.Text);
+            if (comboBox7.Items.Count > Util.toInt(comboBox7.Text))
+                comboBox7.SelectedIndex = Util.toInt(comboBox7.Text);
             else
                 comboBox5.SelectedIndex = 0;
             comboBox8.Items.Clear();
             comboBox8.Items.Add('-');
-            for (int i = 1; i <= Data.toInt(comboBox11.SelectedItem.ToString()); i++)
+            for (int i = 1; i <= Util.toInt(comboBox11.SelectedItem.ToString()); i++)
                 comboBox8.Items.Add(i);
-            if (comboBox8.Items.Count > Data.toInt(comboBox8.Text))
-                comboBox8.SelectedIndex = Data.toInt(comboBox8.Text);
+            if (comboBox8.Items.Count > Util.toInt(comboBox8.Text))
+                comboBox8.SelectedIndex = Util.toInt(comboBox8.Text);
             else
                 comboBox8.SelectedIndex = 0;
-            Data.feld[1] = Data.toInt(comboBox11.SelectedItem.ToString());
+            Data.feld[1] = Util.toInt(comboBox11.SelectedItem.ToString());
             checkWochen();
             if (comboBox10.SelectedIndex != -1 && comboBox11.SelectedIndex != -1 && Data.staffeln != null)
             {
