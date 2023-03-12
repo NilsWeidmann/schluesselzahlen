@@ -73,82 +73,63 @@ namespace Schluesselzahlen
             else
                 textBox3.Text = "";
             textBox7.Text = k[i].t[0].liga.name;
-            
-            this.comboBox2.Items.Clear();
-            this.comboBox2.Text = k[i].t[0].zahl.ToString();
-            this.textBox4.Text = k[i].wunsch.ToString();
-            for (int j = 0; j < 3; j++)
-                if (k[i].zahl[j] != 0)
-                {
-                    comboBox2.Items.Add(k[i].zahl[j]);
-                    if (k[i].t[0].zahl == k[i].zahl[j])
-                        comboBox2.SelectedIndex = j;
-                }
 
-            this.comboBox3.Items.Clear();
-            this.comboBox3.Text = k[i].t[1].zahl.ToString();
-            this.textBox5.Text = k[i].wunsch.ToString();
-            for (int j = 0; j < 3; j++)
-                if (k[i].zahl[j] != 0)
-                {
-                    comboBox3.Items.Add(k[i].zahl[j]);
-                    if (k[i].t[1].zahl == k[i].zahl[j])
-                        comboBox3.SelectedIndex = j;
-                }
+            ComboBox[] combo = { comboBox2, comboBox3, comboBox4 };
+            TextBox[] text = { textBox4, textBox5, textBox6 };
 
-            if (k[i].t.Length == 3)
+            for (int box = 0; box < 3; box++)
             {
-                this.comboBox4.Items.Clear();
-                this.comboBox4.Text = k[i].t[2].zahl.ToString();
-                this.textBox6.Text = k[i].wunsch.ToString();
-                for (int j = 0; j < 3; j++)
-                    if (k[i].zahl[j] != 0)
-                    {
-                        comboBox4.Items.Add(k[i].zahl[j]);
-                        if (k[i].t[2].zahl == k[i].zahl[j])
-                            comboBox4.SelectedIndex = j;
-                    }
-                comboBox4.Enabled = true;
+                if (box < k[i].t.Length)
+                {
+                    combo[box].Items.Clear();
+                    combo[box].Text = k[i].t[box].zahl.ToString();
+                    text[box].Text = k[i].wunsch.ToString();
+                    for (int j = 0; j < 3; j++)
+                        if (k[i].zahl[j] != 0)
+                        {
+                            combo[box].Items.Add(k[i].zahl[j]);
+                            if (k[i].t[box].zahl == k[i].zahl[j])
+                                combo[box].SelectedIndex = j;
+                        }
+                    combo[box].Enabled = true;
+                }
+                else
+                {
+                    combo[box].Items.Clear();
+                    combo[box].Text = "";
+                    text[box].Text = "";
+                    combo[box].SelectedIndex = -1;
+                    combo[box].Enabled = false;
+                }
             }
-            else
-            {
-                this.comboBox4.Items.Clear();
-                this.comboBox4.Text = "";
-                this.textBox6.Text = "";
-                comboBox4.SelectedIndex = -1;
-                comboBox4.Enabled = false;
-            }
-            
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedIndex == comboBox3.SelectedIndex)
-                comboBox3.SelectedIndex = -1;
-            if (comboBox2.SelectedIndex == comboBox4.SelectedIndex)
-                comboBox4.SelectedIndex = -1;
-            if (comboBox2.SelectedIndex != -1)
-                k[i].t[0].zahl = Data.toInt(comboBox2.SelectedItem.ToString());
+            resetSelectedIndices((ComboBox)sender);
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox3.SelectedIndex == comboBox2.SelectedIndex)
-                comboBox2.SelectedIndex = -1;
-            if (comboBox3.SelectedIndex == comboBox4.SelectedIndex)
-                comboBox4.SelectedIndex = -1;
-            if (comboBox3.SelectedIndex != -1)
-                k[i].t[1].zahl = Data.toInt(comboBox3.SelectedItem.ToString());
+            resetSelectedIndices((ComboBox)sender);
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox4.SelectedIndex == comboBox3.SelectedIndex)
-                comboBox3.SelectedIndex = -1;
-            if (comboBox4.SelectedIndex == comboBox2.SelectedIndex)
-                comboBox2.SelectedIndex = -1;
-            if (comboBox4.SelectedIndex != -1)
-                k[i].t[2].zahl = Data.toInt(comboBox4.SelectedItem.ToString());
+            resetSelectedIndices((ComboBox)sender);
+        }
+
+        private void resetSelectedIndices(ComboBox sender)
+        {
+            ComboBox[] combo = { comboBox2, comboBox3, comboBox4 };
+
+            for (int box = 0; box < 3; box++)
+            {
+                if (combo[box] != sender && sender.SelectedIndex == combo[box].SelectedIndex)
+                    combo[box].SelectedIndex = -1;
+                if (combo[box] == sender && combo[box].SelectedIndex != -1)
+                    k[i].t[box].zahl = Data.toInt(combo[box].SelectedItem.ToString());
+            }
         }
 
         private void Alternativen_FormClosing(object sender, FormClosingEventArgs e)
